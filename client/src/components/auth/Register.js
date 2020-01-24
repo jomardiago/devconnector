@@ -1,7 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-const Register = () => {
+import { setAlert } from '../../actions/alert';
+
+const Register = ({ setAlert }) => {
     const [ formData, setFormData ] = useState({ name: '', email: '', password: '', password2: '' });
     const { name, email, password, password2 } = formData;
 
@@ -9,7 +12,7 @@ const Register = () => {
 
     const onSubmit = e => {
         e.preventDefault();
-        if (password !== password2) return console.error('Passwords do not match');
+        if (password !== password2) return setAlert('Passwords do not match', 'danger');
         console.log(formData);
     };
 
@@ -72,4 +75,8 @@ const Register = () => {
     );
 }
 
-export default Register;
+const mapDispatchToProps = dispatch => ({
+    setAlert: (msg, alertType) => dispatch(setAlert(msg, alertType))
+});
+
+export default connect(null, mapDispatchToProps)(Register);
