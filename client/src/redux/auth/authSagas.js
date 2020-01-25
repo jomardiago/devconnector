@@ -1,8 +1,9 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import axios from 'axios';
 
-import { REGISTER_START, REGISTER_SUCCESS, REGISTER_FAIL } from './authTypes';
+import { REGISTER_START, REGISTER_SUCCESS, REGISTER_FAIL, LOAD_USER, USER_LOADED, LOAD_USER_FAIL } from './authTypes';
 import { setAlert } from '../alert/alertActions';
+import setAuthToken from '../../utils/setAuthToken';
 
 const config = { headers: { 'Content-Type': 'application/json' } };
 
@@ -18,6 +19,7 @@ export function* registerWorker(action) {
     try {
         const data = yield call(registerUser, body);
         yield put({ type: REGISTER_SUCCESS, payload: data });
+        action.dispatch({ type: LOAD_USER });
     } catch (err) {
         const errors = err.response.data.errors;
         if (errors) {
@@ -28,6 +30,28 @@ export function* registerWorker(action) {
     }
 }
 
+export async function getUser() {
+    const res = await axios.get('/api/auth');
+    return res.data;
+}
+
+export function* loadUserWorker(action) {
+    console.log('loadUserWorker hit: ', action);
+    if (localStorage.getItem('token')) setAuthToken(localStorage.getItem('token'));
+
+    try {
+        const data = yield call(getUser);
+        yield put({ type: USER_LOADED, payload: data });
+    } catch (err) {
+        console.log(err);
+        yield put({ type: LOAD_USER_FAIL });
+    }
+}
+
 export function* register() {
     yield takeLatest(REGISTER_START, registerWorker);
+}
+
+export function* loadUser() {
+    yield takeLatest(LOAD_USER, loadUserWorker);
 }
