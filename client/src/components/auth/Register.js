@@ -76,7 +76,7 @@ const Register = ({ setAlert }) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    setAlert: (msg, alertType, timeout) => dispatch(setAlert(msg, alertType, timeout))
+    setAlert: (msg, alertType) => dispatch(setAlert(msg, alertType))
 });
 
 export default connect(null, mapDispatchToProps)(Register);
