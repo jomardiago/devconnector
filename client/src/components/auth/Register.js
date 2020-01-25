@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { setAlert } from '../../redux/alert/alertActions';
+import { register } from '../../redux/auth/authActions';
 
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register }) => {
     const [ formData, setFormData ] = useState({ name: '', email: '', password: '', password2: '' });
     const { name, email, password, password2 } = formData;
 
@@ -13,7 +14,7 @@ const Register = ({ setAlert }) => {
     const onSubmit = e => {
         e.preventDefault();
         if (password !== password2) return setAlert('Passwords do not match', 'danger');
-        console.log(formData);
+        register({ name, email, password });
     };
 
     return (
@@ -76,7 +77,8 @@ const Register = ({ setAlert }) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    setAlert: (msg, alertType) => dispatch(setAlert(msg, alertType))
+    setAlert: (msg, alertType) => dispatch(setAlert(msg, alertType)),
+    register: ({ name, email, password }) => dispatch(register({ name, email, password }, dispatch))
 });
 
 export default connect(null, mapDispatchToProps)(Register);
