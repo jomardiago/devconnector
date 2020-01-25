@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { setAlert } from '../../actions/alert';
+import { setAlert } from '../../redux/alert/alertActions';
 
 const Register = ({ setAlert }) => {
     const [ formData, setFormData ] = useState({ name: '', email: '', password: '', password2: '' });
@@ -76,7 +76,7 @@ const Register = ({ setAlert }) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    setAlert: (msg, alertType) => dispatch(setAlert(msg, alertType))
+    setAlert: (msg, alertType, timeout) => dispatch(setAlert(msg, alertType, timeout))
 });
 
 export default connect(null, mapDispatchToProps)(Register);
