@@ -1,4 +1,4 @@
-import { REGISTER_START, LOAD_USER, LOGIN_START } from './authTypes';
+import { REGISTER_START, LOAD_USER, LOGIN_START, LOGOUT } from './authTypes';
 
 export const register = ({ name, email, password }, dispatch) => ({
     type: REGISTER_START,
@@ -14,4 +14,8 @@ export const loginUser = (email, password, dispatch) => ({
     type: LOGIN_START,
     payload: { email, password },
     dispatch
+});
+
+export const logout = () => ({
+    type: LOGOUT
 });
