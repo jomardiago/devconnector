@@ -44,14 +44,14 @@ const Navbar = ({ isAuthenticated, logout, loading }) => {
 
     return (
         <nav className='navbar bg-dark'>
-        <h1>
-            <Link to='/'>
-                <i className='fas fa-code' /> DevConnector
-            </Link>
-        </h1>
-        {!loading && (
-            <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
-        )}
+            <h1>
+                <Link to='/'>
+                    <i className='fas fa-code' /> DevConnector
+                </Link>
+            </h1>
+            {!loading && (
+                <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+            )}
         </nav>
     );
 };
