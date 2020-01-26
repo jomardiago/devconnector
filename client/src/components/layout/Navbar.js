@@ -3,8 +3,14 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { logout } from '../../redux/auth/authActions';
+import { clearProfile } from '../../redux/profile/profileActions';
 
-const Navbar = ({ isAuthenticated, logout, loading }) => {
+const Navbar = ({ isAuthenticated, logout, loading, clearProfile }) => {
+    const handleLogout = () => {
+        logout();
+        clearProfile();
+    }
+
     const authLinks = (
         <ul>
             <li>
@@ -20,7 +26,7 @@ const Navbar = ({ isAuthenticated, logout, loading }) => {
                 </Link>
             </li>
             <li>
-                <a onClick={logout} href='#!'>
+                <a onClick={handleLogout} href='#!'>
                     <i className='fas fa-sign-out-alt' />{' '}
                     <span className='hide-sm'>Logout</span>
                 </a>
@@ -62,7 +68,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    logout: () => dispatch(logout())
+    logout: () => dispatch(logout()),
+    clearProfile: () => dispatch(clearProfile())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

@@ -1,4 +1,4 @@
-import { GET_CURRENT_PROFILE_SUCCESS, GET_CURRENT_PROFILE_FAILED } from './profileTypes';
+import { GET_CURRENT_PROFILE_SUCCESS, GET_CURRENT_PROFILE_FAILED, CLEAR_PROFILE } from './profileTypes';
 
 const initialState = {
     profile: null,
@@ -12,6 +12,10 @@ export default function(state = initialState, action) {
     const { type, payload } = action;
     
     switch (type) {
+        case CLEAR_PROFILE:
+            return {
+                ...initialState
+            };
         case GET_CURRENT_PROFILE_SUCCESS:
             return {
                 ...state,
