@@ -4,8 +4,7 @@ import axios from 'axios';
 import { REGISTER_START, REGISTER_SUCCESS, REGISTER_FAIL, LOAD_USER, USER_LOADED, LOAD_USER_FAIL, LOGIN_START, LOGIN_SUCCESS, LOGIN_FAIL } from './authTypes';
 import { setAlert } from '../alert/alertActions';
 import setAuthToken from '../../utils/setAuthToken';
-
-const config = { headers: { 'Content-Type': 'application/json' } };
+import config from '../../utils/getAxiosConfig';
 
 export async function registerUser(body) {
     const res = await axios.post('/api/users', body, config);

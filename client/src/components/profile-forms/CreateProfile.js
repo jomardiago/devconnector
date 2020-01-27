@@ -1,7 +1,10 @@
 import React, { useState, Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-const CreateProfile = () => {
+import { createOrUpdateProfileAction } from '../../redux/profile/profileActions';
+
+const CreateProfile = ({ createOrUpdateProfile, history }) => {
     const [ formData, setFormData ] = useState({
         company: '',
         website: '',
@@ -23,6 +26,11 @@ const CreateProfile = () => {
     const { twitter, facebook, linkedin, youtube, instagram } = formData; 
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    
+    const onSubmit = e => {
+        e.preventDefault();
+        createOrUpdateProfile(formData, history);
+    };
 
     return (
         <Fragment>
@@ -33,7 +41,7 @@ const CreateProfile = () => {
                 <i className="fas fa-user"></i> Let's get some information to make your profile stand out
             </p>
             <small>* = required field</small>
-            <form className="form">
+            <form className="form" onSubmit={e => onSubmit(e)}>
                 <div className="form-group">
                     <select name="status" value={status} onChange={e => onChange(e)}>
                         <option value="0">* Select Professional Status</option>
@@ -123,4 +131,8 @@ const CreateProfile = () => {
     );
 };
 
-export default connect()(CreateProfile);
+const mapDispatchToProps = dispatch => ({
+    createOrUpdateProfile: (formData, history, edit = false) => dispatch(createOrUpdateProfileAction(formData, history, dispatch, edit))
+});
+
+export default connect(null, mapDispatchToProps)(withRouter(CreateProfile));
