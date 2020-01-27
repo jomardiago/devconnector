@@ -5,7 +5,11 @@ import {
     GET_CURRENT_PROFILE_START, 
     GET_CURRENT_PROFILE_SUCCESS, 
     GET_CURRENT_PROFILE_FAILED, 
-    CREATE_OR_UPDATE_PROFILE_START 
+    CREATE_OR_UPDATE_PROFILE_START, 
+    ADD_EXPERIENCE_START,
+    ADD_EXPERIENCE_SUCCESS,
+    ADD_EDUCATION_START,
+    ADD_EDUCATION_SUCCESS
 } from './profileTypes';
 import config from '../../utils/getAxiosConfig';
 import { setAlert } from '../../redux/alert/alertActions';
@@ -37,7 +41,7 @@ export async function createOrUpdateProfileFromDB(formData) {
 }
 
 export function* createOrUpdateProfileWorker(action) {
-    yield console.log('createOrUpdateProfileWorker hit: ', action);
+    console.log('createOrUpdateProfileWorker hit: ', action);
 
     try {
         const profile = yield call(createOrUpdateProfileFromDB, action.payload.formData);
@@ -61,4 +65,64 @@ export function* createOrUpdateProfileWorker(action) {
 
 export function* createOrUpdateProfile() {
     yield takeLatest(CREATE_OR_UPDATE_PROFILE_START, createOrUpdateProfileWorker);
+}
+
+export async function addProfileExperience(formData) {
+    const res = await axios.put('/api/profile/experience', formData, config);
+    return res.data;
+}
+
+export function* addExperience(action) {
+    console.log('addExperience hit: ', action);
+
+    try {
+        const data = yield call(addProfileExperience, action.payload.formData);
+        yield put({ type: ADD_EXPERIENCE_SUCCESS, payload: data });
+
+        action.payload.dispatch(setAlert('Experience Added', 'success'));
+
+        action.payload.history.push('/dashboard');
+    } catch (err) {
+        const { statusText, status } = err.response;
+        const errors = err.response.data.errors;
+        yield put({ type: GET_CURRENT_PROFILE_FAILED, payload: { msg: statusText, status } });
+
+        if (errors) {
+            errors.forEach(error => action.payload.dispatch(setAlert(error.msg, 'danger')));
+        }
+    }
+}
+
+export function* addExperienceSaga() {
+    yield takeLatest(ADD_EXPERIENCE_START, addExperience);
+}
+
+export async function addProfileEducation(formData) {
+    const res = await axios.put('/api/profile/education', formData, config);
+    return res.data;
+}
+
+export function* addEducation(action) {
+    console.log('addEducation hit: ', action);
+
+    try {
+        const data = yield call(addProfileEducation, action.payload.formData);
+        yield put({ type: ADD_EDUCATION_SUCCESS, payload: data });
+
+        action.payload.dispatch(setAlert('Education Added', 'success'));
+
+        action.payload.history.push('/dashboard');
+    } catch (err) {
+        const { statusText, status } = err.response;
+        const errors = err.response.data.errors;
+        yield put({ type: GET_CURRENT_PROFILE_FAILED, payload: { msg: statusText, status } });
+
+        if (errors) {
+            errors.forEach(error => action.payload.dispatch(setAlert(error.msg, 'danger')));
+        }
+    }
+}
+
+export function* addEducationSaga() {
+    yield takeLatest(ADD_EDUCATION_START, addEducation);
 }

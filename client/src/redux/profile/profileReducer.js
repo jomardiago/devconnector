@@ -1,4 +1,4 @@
-import { GET_CURRENT_PROFILE_SUCCESS, GET_CURRENT_PROFILE_FAILED, CLEAR_PROFILE } from './profileTypes';
+import { GET_CURRENT_PROFILE_SUCCESS, GET_CURRENT_PROFILE_FAILED, CLEAR_PROFILE, ADD_EDUCATION_SUCCESS, ADD_EXPERIENCE_SUCCESS } from './profileTypes';
 
 const initialState = {
     profile: null,
@@ -17,6 +17,8 @@ export default function(state = initialState, action) {
                 ...initialState
             };
         case GET_CURRENT_PROFILE_SUCCESS:
+        case ADD_EXPERIENCE_SUCCESS:
+        case ADD_EDUCATION_SUCCESS:
             return {
                 ...state,
                 profile: payload,
