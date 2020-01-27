@@ -1,10 +1,10 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { createOrUpdateProfileAction } from '../../redux/profile/profileActions';
+import { createOrUpdateProfileAction, getCurrentProfileAction } from '../../redux/profile/profileActions';
 
-const CreateProfile = ({ createOrUpdateProfile, history }) => {
+const EditProfile = ({ profile: {profile, loading}, createOrUpdateProfile, history, getCurrentProfile }) => {
     const [ formData, setFormData ] = useState({
         company: '',
         website: '',
@@ -29,8 +29,27 @@ const CreateProfile = ({ createOrUpdateProfile, history }) => {
     
     const onSubmit = e => {
         e.preventDefault();
-        createOrUpdateProfile(formData, history);
+        createOrUpdateProfile(formData, history, true);
     };
+
+    useEffect(() => {
+        getCurrentProfile();
+
+        setFormData({
+            company: loading || !profile.company ? '' : profile.company,
+            website: loading || !profile.website ? '' : profile.website,
+            location: loading || !profile.location ? '' : profile.location,
+            status: loading || !profile.status ? '' : profile.status,
+            skills: loading || !profile.skills ? '' : profile.skills.join(','),
+            githubusername: loading || !profile.githubusername ? '' : profile.githubusername,
+            bio: loading || !profile.bio ? '' : profile.bio,
+            twitter: loading || !profile.social ? '' : profile.social.twitter,
+            facebook: loading || !profile.social ? '' : profile.social.facebook,
+            linkedin: loading || !profile.social ? '' : profile.social.linkedin,
+            youtube: loading || !profile.social ? '' : profile.social.youtube,
+            instagram: loading || !profile.social ? '' : profile.social.instagram
+          });
+    }, [loading, getCurrentProfile]);
 
     return (
         <Fragment>
@@ -131,8 +150,13 @@ const CreateProfile = ({ createOrUpdateProfile, history }) => {
     );
 };
 
-const mapDispatchToProps = dispatch => ({
-    createOrUpdateProfile: (formData, history, edit = false) => dispatch(createOrUpdateProfileAction(formData, history, dispatch, edit))
+const mapStateToProps = state => ({
+    profile: state.profile
 });
 
-export default connect(null, mapDispatchToProps)(withRouter(CreateProfile));
+const mapDispatchToProps = dispatch => ({
+    createOrUpdateProfile: (formData, history, edit = false) => dispatch(createOrUpdateProfileAction(formData, history, dispatch, edit)),
+    getCurrentProfile: () => dispatch(getCurrentProfileAction())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditProfile));
