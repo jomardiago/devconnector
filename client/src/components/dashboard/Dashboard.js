@@ -7,10 +7,10 @@ import DashboardActions from './DashboardActions';
 import Experience from './Experience';
 import Education from './Education';
 
-import { getCurrentProfileAction } from '../../redux/profile/profileActions';
+import { getCurrentProfileAction, deleteAccountAction } from '../../redux/profile/profileActions';
 
 
-const Dashboard = ({ auth: { user }, profile: {profile, loading}, getCurrentProfile }) => {
+const Dashboard = ({ auth: { user }, profile: {profile, loading}, getCurrentProfile, deleteAccount }) => {
     useEffect(() => {
         getCurrentProfile();
     }, [getCurrentProfile]);
@@ -29,6 +29,11 @@ const Dashboard = ({ auth: { user }, profile: {profile, loading}, getCurrentProf
                         <DashboardActions />
                         <Experience experience={profile.experience} />
                         <Education education={profile.education} />
+                        <div className="my-2">
+                            <button className="btn btn-danger" onClick={() => deleteAccount()}>
+                                <i className="fas fa-user-minus"></i> Delete My Account
+                            </button>
+                        </div>
                     </Fragment>
                 ) : (
                     <Fragment>
@@ -47,7 +52,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    getCurrentProfile: () => dispatch(getCurrentProfileAction())
+    getCurrentProfile: () => dispatch(getCurrentProfileAction()),
+    deleteAccount: () => dispatch(deleteAccountAction(dispatch))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

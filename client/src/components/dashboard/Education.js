@@ -3,7 +3,9 @@ import Moment from 'react-moment';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
-const Education = ({ education }) => {
+import { deleteEducationAction } from '../../redux/profile/profileActions';
+
+const Education = ({ education, deleteEducation }) => {
   const educations = education.map(edu => (
     <tr key={edu._id}>
       <td>{edu.school}</td>
@@ -17,7 +19,7 @@ const Education = ({ education }) => {
         )}
       </td>
       <td>
-        <button className="btn btn-danger">
+        <button className="btn btn-danger" onClick={() => deleteEducation(edu._id)}>
           Delete
         </button>
       </td>
@@ -42,4 +44,8 @@ const Education = ({ education }) => {
   );
 };
 
-export default connect()(Education);
+const mapDispatchToProps = dispatch => ({
+  deleteEducation: id => dispatch(deleteEducationAction(id, dispatch))
+});
+
+export default connect(null, mapDispatchToProps)(Education);

@@ -2,7 +2,15 @@ import { all, call } from 'redux-saga/effects';
 
 import { setAlert } from './alert/alertSagas';
 import { register, loadUser, loginUser } from './auth/authSagas';
-import { getCurrentProfile, createOrUpdateProfile, addExperienceSaga, addEducationSaga } from './profile/profileSagas';
+import { 
+    getCurrentProfile, 
+    createOrUpdateProfile, 
+    addExperienceSaga, 
+    addEducationSaga,
+    deleteExperienceSaga,
+    deleteEducationSaga,
+    deleteAccountSaga
+} from './profile/profileSagas';
 
 export default function* rootSaga() {
     yield all([
@@ -13,6 +21,9 @@ export default function* rootSaga() {
         call(getCurrentProfile),
         call(createOrUpdateProfile),
         call(addExperienceSaga),
-        call(addEducationSaga)
+        call(addEducationSaga),
+        call(deleteExperienceSaga),
+        call(deleteEducationSaga),
+        call(deleteAccountSaga)
     ]);
 }

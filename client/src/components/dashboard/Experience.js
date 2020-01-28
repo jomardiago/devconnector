@@ -3,7 +3,9 @@ import Moment from 'react-moment';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
-const Experience = ({ experience }) => {
+import { deleteExperienceAction } from '../../redux/profile/profileActions';
+
+const Experience = ({ experience, deleteExperience }) => {
   const experiences = experience.map(exp => (
     <tr key={exp._id}>
       <td>{exp.company}</td>
@@ -17,7 +19,7 @@ const Experience = ({ experience }) => {
         )}
       </td>
       <td>
-        <button className="btn btn-danger">
+        <button className="btn btn-danger" onClick={() => deleteExperience(exp._id)}>
           Delete
         </button>
       </td>
@@ -42,4 +44,8 @@ const Experience = ({ experience }) => {
   );
 };
 
-export default connect()(Experience);
+const mapDispatchToProps = dispatch => ({
+  deleteExperience: id => dispatch(deleteExperienceAction(id, dispatch))
+});
+
+export default connect(null, mapDispatchToProps)(Experience);

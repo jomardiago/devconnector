@@ -9,7 +9,14 @@ import {
     ADD_EXPERIENCE_START,
     ADD_EXPERIENCE_SUCCESS,
     ADD_EDUCATION_START,
-    ADD_EDUCATION_SUCCESS
+    ADD_EDUCATION_SUCCESS,
+    DELETE_EXPERIENCE_START,
+    DELETE_EXPERIENCE_SUCCESS,
+    DELETE_EDUCATION_START,
+    DELETE_EDUCATION_SUCCESS,
+    DELETE_ACCOUNT_START,
+    DELETE_ACCOUNT_SUCCESS,
+    CLEAR_PROFILE
 } from './profileTypes';
 import config from '../../utils/getAxiosConfig';
 import { setAlert } from '../../redux/alert/alertActions';
@@ -125,4 +132,91 @@ export function* addEducation(action) {
 
 export function* addEducationSaga() {
     yield takeLatest(ADD_EDUCATION_START, addEducation);
+}
+
+export async function deleteExperience(id) {
+    const res = await axios.delete(`/api/profile/experience/${id}`);
+    return res.data;
+}
+
+export function* deleteExperienceWorker(action) {
+    const { payload } = action;
+    const { id, dispatch } = payload;
+
+    try {
+        const data = yield call(deleteExperience, id);
+        yield put({ type: DELETE_EXPERIENCE_SUCCESS, payload: data });
+        dispatch(setAlert('Experience Deleted', 'success'));
+    } catch (err) {
+        const { statusText, status } = err.response;
+        const errors = err.response.data.errors;
+        yield put({ type: GET_CURRENT_PROFILE_FAILED, payload: { msg: statusText, status } });
+
+        if (errors) {
+            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+        }
+    }
+}
+
+export function* deleteExperienceSaga() {
+    yield takeLatest(DELETE_EXPERIENCE_START, deleteExperienceWorker);
+}
+
+export async function deleteEducation(id) {
+    const res = await axios.delete(`/api/profile/education/${id}`);
+    return res.data;
+}
+
+export function* deleteEducationWorker(action) {
+    const { payload } = action;
+    const { id, dispatch } = payload;
+
+    try {
+        const data = yield call(deleteEducation, id);
+        yield put({ type: DELETE_EDUCATION_SUCCESS, payload: data });
+        dispatch(setAlert('Education Deleted', 'success'));
+    } catch (err) {
+        const { statusText, status } = err.response;
+        const errors = err.response.data.errors;
+        yield put({ type: GET_CURRENT_PROFILE_FAILED, payload: { msg: statusText, status } });
+
+        if (errors) {
+            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+        }
+    }
+}
+
+export function* deleteEducationSaga() {
+    yield takeLatest(DELETE_EDUCATION_START, deleteEducationWorker);
+}
+
+export async function deleteAccount() {
+    const res = await axios.delete('/api/profile');
+    return res.data;
+}
+
+export function* deleteAccountWorker(action) {
+    const { payload } = action;
+    const { dispatch } = payload;
+
+    if (window.confirm('Are you sure? This can NOT be undone!')) {
+        try {
+            yield call(deleteAccount);
+            yield put({ type: CLEAR_PROFILE });
+            yield put({ type: DELETE_ACCOUNT_SUCCESS });
+            dispatch(setAlert('Your account has been permanently deleted.'));
+        } catch (err) {
+            const { statusText, status } = err.response;
+            const errors = err.response.data.errors;
+            yield put({ type: GET_CURRENT_PROFILE_FAILED, payload: { msg: statusText, status } });
+    
+            if (errors) {
+                errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+            }
+        }
+    }
+}
+
+export function* deleteAccountSaga() {
+    yield takeLatest(DELETE_ACCOUNT_START, deleteAccountWorker);
 }

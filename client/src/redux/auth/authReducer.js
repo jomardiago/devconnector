@@ -1,4 +1,14 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, LOAD_USER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from './authTypes';
+import { 
+    REGISTER_SUCCESS, 
+    REGISTER_FAIL, 
+    USER_LOADED, 
+    LOAD_USER_FAIL, 
+    LOGIN_SUCCESS, 
+    LOGIN_FAIL, 
+    LOGOUT,
+} from './authTypes';
+
+import { DELETE_ACCOUNT_SUCCESS } from '../profile/profileTypes'; 
 
 const initialState = {
     token: localStorage.getItem('token'),
@@ -22,6 +32,7 @@ export default function(state = initialState, action) {
         case LOAD_USER_FAIL:
         case LOGIN_FAIL:
         case LOGOUT:
+        case DELETE_ACCOUNT_SUCCESS:
             localStorage.removeItem('token');
             return {
                 ...state,
