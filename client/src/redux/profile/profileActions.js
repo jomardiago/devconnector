@@ -6,7 +6,10 @@ import {
     ADD_EDUCATION_START, 
     DELETE_EXPERIENCE_START,
     DELETE_EDUCATION_START,
-    DELETE_ACCOUNT_START
+    DELETE_ACCOUNT_START,
+    GET_ALL_PROFILES_START,
+    GET_PROFILE_BY_ID_START,
+    GET_GITHUB_REPOS_START
 } from './profileTypes';
 
 export const getCurrentProfileAction = () => ({
@@ -45,4 +48,18 @@ export const deleteEducationAction = (id, dispatch) => ({
 export const deleteAccountAction = (dispatch) => ({
     type: DELETE_ACCOUNT_START,
     payload: { dispatch }
+});
+
+export const getAllProfilesAction = () => ({
+    type: GET_ALL_PROFILES_START
+});
+
+export const getProfileByIdAction = userId => ({
+    type: GET_PROFILE_BY_ID_START,
+    payload: userId
+});
+
+export const getGithubReposAction = username => ({
+    type: GET_GITHUB_REPOS_START,
+    payload: username
 });

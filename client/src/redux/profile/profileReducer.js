@@ -5,7 +5,9 @@ import {
     ADD_EDUCATION_SUCCESS, 
     ADD_EXPERIENCE_SUCCESS,
     DELETE_EXPERIENCE_SUCCESS,
-    DELETE_EDUCATION_SUCCESS
+    DELETE_EDUCATION_SUCCESS,
+    GET_ALL_PROFILES_SUCCESS,
+    GET_GITHUB_REPOS_SUCCESS
 } from './profileTypes';
 
 const initialState = {
@@ -29,15 +31,31 @@ export default function(state = initialState, action) {
         case ADD_EDUCATION_SUCCESS:
         case DELETE_EXPERIENCE_SUCCESS:
         case DELETE_EDUCATION_SUCCESS:
+        case GET_PROFILE_BY_ID_SUCCESS:
             return {
                 ...state,
                 profile: payload,
                 loading: false
             };
         case GET_CURRENT_PROFILE_FAILED:
+        case GET_ALL_PROFILES_FAILED:
+        case GET_PROFILE_BY_ID_FAILED:
+        case GET_GITHUB_REPOS_FAILED:
             return {
                 ...state,
                 error: payload,
+                loading: false
+            };
+        case GET_ALL_PROFILES_SUCCESS: 
+            return {
+                ...state,
+                profiles: payload,
+                loading: false
+            };
+        case GET_GITHUB_REPOS_SUCCESS:
+            return {
+                ...state,
+                repos: payload,
                 loading: false
             };
         default:

@@ -9,7 +9,10 @@ import {
     addEducationSaga,
     deleteExperienceSaga,
     deleteEducationSaga,
-    deleteAccountSaga
+    deleteAccountSaga,
+    getAllProfilesSaga,
+    getProfileByIdSaga,
+    getGithubReposSaga
 } from './profile/profileSagas';
 
 export default function* rootSaga() {
@@ -24,6 +27,9 @@ export default function* rootSaga() {
         call(addEducationSaga),
         call(deleteExperienceSaga),
         call(deleteEducationSaga),
-        call(deleteAccountSaga)
+        call(deleteAccountSaga),
+        call(getAllProfilesSaga),
+        call(getProfileByIdSaga),
+        call(getGithubReposSaga)
     ]);
 }

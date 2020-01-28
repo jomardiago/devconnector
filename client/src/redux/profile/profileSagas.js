@@ -16,7 +16,16 @@ import {
     DELETE_EDUCATION_SUCCESS,
     DELETE_ACCOUNT_START,
     DELETE_ACCOUNT_SUCCESS,
-    CLEAR_PROFILE
+    CLEAR_PROFILE,
+    GET_ALL_PROFILES_START,
+    GET_ALL_PROFILES_FAILED,
+    GET_ALL_PROFILES_SUCCESS,
+    GET_PROFILE_BY_ID_START,
+    GET_PROFILE_BY_ID_SUCCESS,
+    GET_PROFILE_BY_ID_FAILED,
+    GET_GITHUB_REPOS_START,
+    GET_GITHUB_REPOS_SUCCESS,
+    GET_GITHUB_REPOS_FAILED
 } from './profileTypes';
 import config from '../../utils/getAxiosConfig';
 import { setAlert } from '../../redux/alert/alertActions';
@@ -219,4 +228,62 @@ export function* deleteAccountWorker(action) {
 
 export function* deleteAccountSaga() {
     yield takeLatest(DELETE_ACCOUNT_START, deleteAccountWorker);
+}
+
+export async function getAllProfiles() {
+    const res = await axios.get('/api/profile');
+    return res.data;
+}
+
+export function* getAllProfilesWorker() {
+    try {
+        yield put({ type: CLEAR_PROFILE });
+        const data = yield call(getAllProfiles);
+        yield put({ type: GET_ALL_PROFILES_SUCCESS, payload: data });
+    } catch (err) {
+        const { statusText, status } = err.response;
+        yield put({ type: GET_ALL_PROFILES_FAILED, payload: { msg: statusText, status } });
+    }
+}
+
+export function* getAllProfilesSaga() {
+    yield takeLatest(GET_ALL_PROFILES_START, getAllProfilesWorker);
+};
+
+export async function getProfileById(userId) {
+    const res = await axios.get(`/api/profile/user/${userId}`);
+    return res.data;
+}
+
+export function* getProfileByIdWorker(action) {
+    try {
+        const data = yield call(getProfileById, action.payload);
+        yield put({ type: GET_PROFILE_BY_ID_SUCCESS, payload: data });
+    } catch (err) {
+        const { statusText, status } = err.response;
+        yield put({ type: GET_PROFILE_BY_ID_FAILED, payload: { msg: statusText, status } });
+    }
+}
+
+export function* getProfileByIdSaga() {
+    yield takeLatest(GET_PROFILE_BY_ID_START, getProfileByIdWorker);
+}
+
+export async function getGithubRepos(username) {
+    const res = await axios.get(`/api/profile/github/${username}`);
+    return res.data;
+}
+
+export function* getGithubReposWorker(action) {
+    try {
+        const data = yield call(getGithubRepos, action.payload);
+        yield put({ type: GET_GITHUB_REPOS_SUCCESS, payload: data });
+    } catch (err) {
+        const { statusText, status } = err.response;
+        yield put({ type: GET_GITHUB_REPOS_FAILED, payload: { msg: statusText, status } });
+    }
+}
+
+export function* getGithubReposSaga() {
+    yield takeLatest(GET_GITHUB_REPOS_START, getGithubReposSaga);
 }
