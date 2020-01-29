@@ -2,6 +2,7 @@ import { all, call } from 'redux-saga/effects';
 
 import { setAlert } from './alert/alertSagas';
 import { register, loadUser, loginUser } from './auth/authSagas';
+
 import { 
     getCurrentProfile, 
     createOrUpdateProfile, 
@@ -14,7 +15,12 @@ import {
     getProfileByIdSaga,
     getGithubReposSaga
 } from './profile/profileSagas';
-import { getPostsSaga } from './post/postSagas';
+
+import { 
+    getPostsSaga,
+    likePostSaga,
+    unlikePostSaga
+} from './post/postSagas';
 
 export default function* rootSaga() {
     yield all([
@@ -32,6 +38,8 @@ export default function* rootSaga() {
         call(getAllProfilesSaga),
         call(getProfileByIdSaga),
         call(getGithubReposSaga),
-        call(getPostsSaga)
+        call(getPostsSaga),
+        call(likePostSaga),
+        call(unlikePostSaga)
     ]);
 }

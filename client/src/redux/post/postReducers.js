@@ -17,11 +17,19 @@ export default function(state = INITIAL_STATE, action) {
                 loading: false
             };
         case postTypes.GET_POSTS_FAILED:
+        case postTypes.LIKE_POST_FAILED:
+        case postTypes.UNLIKE_POST_FAILED:
             return {
                 ...state,
                 error: {},
-                loading: false,
-                posts: []
+                loading: false
+            };
+        case postTypes.LIKE_POST_SUCCESS:
+        case postTypes.UNLIKE_POST_SUCCESS:
+            return {
+                ...state,
+                posts: state.posts.map(post => post._id === payload.id ? { ...post, likes: payload.likes } : post),
+                loading: false
             };
         default:
             return state;
