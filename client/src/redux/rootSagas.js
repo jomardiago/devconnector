@@ -14,6 +14,7 @@ import {
     getProfileByIdSaga,
     getGithubReposSaga
 } from './profile/profileSagas';
+import { getPostsSaga } from './post/postSagas';
 
 export default function* rootSaga() {
     yield all([
@@ -30,6 +31,7 @@ export default function* rootSaga() {
         call(deleteAccountSaga),
         call(getAllProfilesSaga),
         call(getProfileByIdSaga),
-        call(getGithubReposSaga)
+        call(getGithubReposSaga),
+        call(getPostsSaga)
     ]);
 }
