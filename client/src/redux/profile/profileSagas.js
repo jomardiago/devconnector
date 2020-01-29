@@ -285,5 +285,5 @@ export function* getGithubReposWorker(action) {
 }
 
 export function* getGithubReposSaga() {
-    yield takeLatest(GET_GITHUB_REPOS_START, getGithubReposSaga);
+    yield takeLatest(GET_GITHUB_REPOS_START, getGithubReposWorker);
 }
