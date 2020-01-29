@@ -19,6 +19,7 @@ export default function(state = INITIAL_STATE, action) {
         case postTypes.GET_POSTS_FAILED:
         case postTypes.LIKE_POST_FAILED:
         case postTypes.UNLIKE_POST_FAILED:
+        case postTypes.DELETE_POST_FAILED:
             return {
                 ...state,
                 error: {},
@@ -29,6 +30,12 @@ export default function(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 posts: state.posts.map(post => post._id === payload.id ? { ...post, likes: payload.likes } : post),
+                loading: false
+            };
+        case postTypes.DELETE_POST_SUCCESS:
+            return {
+                ...state,
+                posts: state.posts.filter(post => post._id !== payload),
                 loading: false
             };
         default:

@@ -19,7 +19,8 @@ import {
 import { 
     getPostsSaga,
     likePostSaga,
-    unlikePostSaga
+    unlikePostSaga,
+    deletePostSaga
 } from './post/postSagas';
 
 export default function* rootSaga() {
@@ -40,6 +41,7 @@ export default function* rootSaga() {
         call(getGithubReposSaga),
         call(getPostsSaga),
         call(likePostSaga),
-        call(unlikePostSaga)
+        call(unlikePostSaga),
+        call(deletePostSaga)
     ]);
 }

@@ -2,6 +2,7 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import axios from 'axios';
 
 import * as postTypes from './postTypes';
+import { setAlert } from '../alert/alertActions';
 
 export async function getPosts() {
     const res = await axios.get('/api/posts');
@@ -15,6 +16,11 @@ export async function likePost(postId) {
 
 export async function unlikePost(postId) {
     const res = await axios.put(`/api/posts/unlike/${postId}`);
+    return res.data;
+}
+
+export async function deletePost(postId) {
+    const res = await axios.delete(`/api/posts/${postId}`);
     return res.data;
 }
 
@@ -45,6 +51,16 @@ export function* unlikePostWorker(action) {
     }
 }
 
+export function* deletePostWorker(action) {
+    try {
+        yield call(deletePost, action.payload);
+        yield put({ type: postTypes.DELETE_POST_SUCCESS, payload: action.payload });
+        action.dispatch(setAlert('Post Removed.', 'success'));
+    } catch (err) {
+        yield put({ type: postTypes.DELETE_POST_FAILED, payload: { msg: err.response.statusText, status: err.response.status } });
+    }
+}
+
 export function* getPostsSaga() {
     yield takeLatest(postTypes.GET_POSTS_START, getPostsWorker);
 }
@@ -55,4 +71,8 @@ export function* likePostSaga() {
 
 export function* unlikePostSaga() {
     yield takeLatest(postTypes.UNLIKE_POST_START, unlikePostWorker);
+}
+
+export function* deletePostSaga() {
+    yield takeLatest(postTypes.DELETE_POST_START, deletePostWorker);
 }

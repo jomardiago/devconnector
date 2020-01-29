@@ -3,17 +3,21 @@ import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
 
-import { likePostAction, unlikePostAction } from '../../redux/post/postActions';
+import { likePostAction, unlikePostAction, deletePostAction } from '../../redux/post/postActions';
 
-const PostItem = ({ auth, post, likePost, unlikePost }) => {
+const PostItem = ({ auth, post, likePost, unlikePost, deletePost }) => {
     const { _id, text, name, avatar, user, likes, comments, date } = post;
 
     const handleLikePost = () => {
         likePost(_id);
-    };
+    }
 
     const handleUnlikePost = () => {
         unlikePost(_id);
+    }
+
+    const handleDeletePost = () => {
+        deletePost(_id);
     }
 
     return (
@@ -39,7 +43,7 @@ const PostItem = ({ auth, post, likePost, unlikePost }) => {
                 </Link>
                 {
                     !auth.loading && user === auth.user._id && (
-                        <button type="button" className="btn btn-danger">
+                        <button type="button" className="btn btn-danger" onClick={handleDeletePost}>
                             <i className="fas fa-times"></i>
                         </button>
                     )
@@ -55,7 +59,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     likePost: id => dispatch(likePostAction(id)),
-    unlikePost: id => dispatch(unlikePostAction(id))
+    unlikePost: id => dispatch(unlikePostAction(id)),
+    deletePost: id => dispatch(deletePostAction(id, dispatch))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItem);

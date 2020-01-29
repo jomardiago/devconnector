@@ -13,3 +13,9 @@ export const unlikePostAction = id => ({
     type: postTypes.UNLIKE_POST_START,
     payload: id
 });
+
+export const deletePostAction = (id, dispatch) => ({
+    type: postTypes.DELETE_POST_START,
+    payload: id,
+    dispatch
+});
