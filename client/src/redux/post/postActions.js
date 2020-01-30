@@ -19,3 +19,9 @@ export const deletePostAction = (id, dispatch) => ({
     payload: id,
     dispatch
 });
+
+export const addPostAction = (formData, dispatch) => ({
+    type: postTypes.ADD_POST_START,
+    payload: formData,
+    dispatch
+});

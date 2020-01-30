@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Spinner from '../layout/Spinner';
 import PostItem from './PostItem';
+import PostForm from './PostForm';
 
 import * as postActions from '../../redux/post/postActions';
 
@@ -17,6 +18,7 @@ const Posts = ({ getPosts, posts, loading }) => {
             <p className="lead">
                 <i className="fas fa-user"></i> Welcome to the community
             </p>
+            <PostForm />
             <div className="posts">
                 {
                     posts.map(post => (

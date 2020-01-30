@@ -1,5 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import axios from 'axios';
+import config from '../../utils/getAxiosConfig';
 
 import * as postTypes from './postTypes';
 import { setAlert } from '../alert/alertActions';
@@ -21,6 +22,11 @@ export async function unlikePost(postId) {
 
 export async function deletePost(postId) {
     const res = await axios.delete(`/api/posts/${postId}`);
+    return res.data;
+}
+
+export async function addPost(formData) {
+    const res = await axios.post('/api/posts', formData, config);
     return res.data;
 }
 
@@ -61,6 +67,16 @@ export function* deletePostWorker(action) {
     }
 }
 
+export function* addPostWorker(action) {
+    try {
+        const data = yield call(addPost, action.payload);
+        yield put({ type: postTypes.ADD_POST_SUCCESS, payload: data });
+        action.dispatch(setAlert('Post Created.', 'success'));
+    } catch (err) {
+        yield put({ type: postTypes.ADD_POST_FAILED, payload: { msg: err.response.statusText, status: err.response.status } });
+    }
+}
+
 export function* getPostsSaga() {
     yield takeLatest(postTypes.GET_POSTS_START, getPostsWorker);
 }
@@ -75,4 +91,8 @@ export function* unlikePostSaga() {
 
 export function* deletePostSaga() {
     yield takeLatest(postTypes.DELETE_POST_START, deletePostWorker);
+}
+
+export function* addPostSaga() {
+    yield takeLatest(postTypes.ADD_POST_START, addPostWorker);
 }

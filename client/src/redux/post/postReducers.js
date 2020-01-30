@@ -20,6 +20,7 @@ export default function(state = INITIAL_STATE, action) {
         case postTypes.LIKE_POST_FAILED:
         case postTypes.UNLIKE_POST_FAILED:
         case postTypes.DELETE_POST_FAILED:
+        case postTypes.ADD_POST_FAILED:
             return {
                 ...state,
                 error: {},
@@ -36,6 +37,12 @@ export default function(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 posts: state.posts.filter(post => post._id !== payload),
+                loading: false
+            };
+        case postTypes.ADD_POST_SUCCESS:
+            return {
+                ...state,
+                posts: [payload, ...state.posts],
                 loading: false
             };
         default:
