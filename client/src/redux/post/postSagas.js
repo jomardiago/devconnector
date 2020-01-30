@@ -30,6 +30,11 @@ export async function addPost(formData) {
     return res.data;
 }
 
+export async function getPost(postId) {
+    const res = await axios.get(`/api/posts/${postId}`);
+    return res.data;
+}
+
 export function* getPostsWorker(action) {
     try {
         const data = yield call(getPosts);
@@ -77,6 +82,15 @@ export function* addPostWorker(action) {
     }
 }
 
+export function* getPostWorker(action) {
+    try {
+        const data = yield call(getPost, action.payload);
+        yield put({ type: postTypes.GET_POST_SUCCESS, payload: data });
+    } catch (err) {
+        yield put({ type: postTypes.GET_POST_FAILED, payload: { msg: err.response.statusText, status: err.response.status } });
+    }
+}
+
 export function* getPostsSaga() {
     yield takeLatest(postTypes.GET_POSTS_START, getPostsWorker);
 }
@@ -95,4 +109,8 @@ export function* deletePostSaga() {
 
 export function* addPostSaga() {
     yield takeLatest(postTypes.ADD_POST_START, addPostWorker);
+}
+
+export function* getPostSaga() {
+    yield takeLatest(postTypes.GET_POST_START, getPostWorker);
 }

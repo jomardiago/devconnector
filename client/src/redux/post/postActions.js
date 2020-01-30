@@ -25,3 +25,8 @@ export const addPostAction = (formData, dispatch) => ({
     payload: formData,
     dispatch
 });
+
+export const getPostAction = postId => ({
+    type: postTypes.GET_POST_START,
+    payload: postId
+});

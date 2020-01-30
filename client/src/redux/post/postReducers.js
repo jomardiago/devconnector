@@ -21,6 +21,7 @@ export default function(state = INITIAL_STATE, action) {
         case postTypes.UNLIKE_POST_FAILED:
         case postTypes.DELETE_POST_FAILED:
         case postTypes.ADD_POST_FAILED:
+        case postTypes.GET_POST_FAILED:
             return {
                 ...state,
                 error: {},
@@ -43,6 +44,12 @@ export default function(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 posts: [payload, ...state.posts],
+                loading: false
+            };
+        case postTypes.GET_POST_SUCCESS:
+            return {
+                ...state,
+                post: payload,
                 loading: false
             };
         default:

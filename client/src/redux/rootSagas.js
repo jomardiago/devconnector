@@ -21,7 +21,8 @@ import {
     likePostSaga,
     unlikePostSaga,
     deletePostSaga,
-    addPostSaga
+    addPostSaga,
+    getPostSaga
 } from './post/postSagas';
 
 export default function* rootSaga() {
@@ -44,6 +45,7 @@ export default function* rootSaga() {
         call(likePostSaga),
         call(unlikePostSaga),
         call(deletePostSaga),
-        call(addPostSaga)
+        call(addPostSaga),
+        call(getPostSaga)
     ]);
 }
