@@ -22,7 +22,9 @@ import {
     unlikePostSaga,
     deletePostSaga,
     addPostSaga,
-    getPostSaga
+    getPostSaga,
+    addCommentSaga,
+    removeCommentSaga
 } from './post/postSagas';
 
 export default function* rootSaga() {
@@ -46,6 +48,8 @@ export default function* rootSaga() {
         call(unlikePostSaga),
         call(deletePostSaga),
         call(addPostSaga),
-        call(getPostSaga)
+        call(getPostSaga),
+        call(addCommentSaga),
+        call(removeCommentSaga)
     ]);
 }

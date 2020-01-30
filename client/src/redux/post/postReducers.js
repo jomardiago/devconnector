@@ -22,6 +22,8 @@ export default function(state = INITIAL_STATE, action) {
         case postTypes.DELETE_POST_FAILED:
         case postTypes.ADD_POST_FAILED:
         case postTypes.GET_POST_FAILED:
+        case postTypes.ADD_COMMENT_FAILED:
+        case postTypes.REMOVE_COMMENT_FAILED:
             return {
                 ...state,
                 error: {},
@@ -50,6 +52,21 @@ export default function(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 post: payload,
+                loading: false
+            };
+        case postTypes.ADD_COMMENT_SUCCESS:
+            return {
+                ...state,
+                post: { ...state.post, comments: payload },
+                loading: false
+            };
+        case postTypes.REMOVE_COMMENT_SUCCESS:
+            return {
+                ...state,
+                post: { 
+                    ...state.post, 
+                    comments: state.post.comments.filter(comment => comment._id !== payload) 
+                },
                 loading: false
             };
         default:

@@ -114,3 +114,43 @@ export function* addPostSaga() {
 export function* getPostSaga() {
     yield takeLatest(postTypes.GET_POST_START, getPostWorker);
 }
+
+export async function addComment(postId, formData) {
+    const res = await axios.post(`/api/posts/comment/${postId}`, formData, config);
+    return res.data;
+}
+
+export function* addCommentWorker(action) {
+    const { postId, formData } = action.payload;
+    try {
+        const data = yield call(addComment, postId, formData);
+        yield put({ type: postTypes.ADD_COMMENT_SUCCESS, payload: data });
+        action.dispatch(setAlert('Comment Added.', 'success'));
+    } catch (err) {
+        yield put({ type: postTypes.ADD_COMMENT_FAILED, payload: { msg: err.response.statusText, status: err.response.status } });
+    }
+}
+
+export function* addCommentSaga() {
+    yield takeLatest(postTypes.ADD_COMMENT_START, addCommentWorker);
+}
+
+export async function removeComment(postId, commentId) {
+    const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
+    return res.data;
+}
+
+export function* removeCommentWorker(action) {
+    const { postId, commentId } = action.payload;
+    try {
+        yield call(removeComment, postId, commentId);
+        yield put({ type: postTypes.REMOVE_COMMENT_SUCCESS, payload: commentId });
+        action.dispatch(setAlert('Comment Removed.', 'success'));
+    } catch (err) {
+        yield put({ type: postTypes.REMOVE_COMMENT_FAILED, payload: { msg: err.response.statusText, status: err.response.status } });
+    }
+}
+
+export function* removeCommentSaga() {
+    yield takeLatest(postTypes.REMOVE_COMMENT_START, removeCommentWorker);
+}

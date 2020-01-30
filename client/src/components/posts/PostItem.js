@@ -41,7 +41,7 @@ const PostItem = ({ auth, post, likePost, unlikePost, deletePost, showActions = 
                             <button type="button" className="btn btn-light" onClick={handleUnlikePost}>
                                 <i className="fas fa-thumbs-down"></i>
                             </button>
-                            <Link to={`/post/${_id}`} className="btn btn-primary">
+                            <Link to={`/posts/${_id}`} className="btn btn-primary">
                                 Discussion { comments.length > 0 && <span className='comment-count'>{comments.length}</span> }
                             </Link>
                             {

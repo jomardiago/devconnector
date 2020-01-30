@@ -30,3 +30,15 @@ export const getPostAction = postId => ({
     type: postTypes.GET_POST_START,
     payload: postId
 });
+
+export const addCommentAction = (postId, formData, dispatch) => ({
+    type: postTypes.ADD_COMMENT_START,
+    payload: { postId, formData },
+    dispatch
+});
+
+export const removeCommentAction = (postId, commentId, dispatch) => ({
+    type: postTypes.REMOVE_COMMENT_START,
+    payload: { postId, commentId },
+    dispatch
+});
